@@ -9,7 +9,21 @@ tar_source("scripts")
 future::plan("multicore", workers = 6)
 options(future.globals.maxSize = 16000 * 1024^2)
 
-
+tar_option_set(
+    packages = c(
+        "here",
+        "Seurat",
+        "BPCells",
+        "qs",
+        "patchwork",
+        "readr",
+        "dplyr",
+        "tidyr",
+        "purrr",
+        "ggplot2"
+    ),
+    format = "qs",
+)
 
 # run target pipeline
 list(
@@ -17,7 +31,42 @@ list(
     # tar_target(knee_plot_cellranger,
     # make_knee(bpcells_cellranger, data_type = "rna"),
     # format = "file"
-    targets_preprocessing
+    tar_target(
+        bpcells_cellranger_cmo,
+        convert_to_bp_cells_object(
+            dataset,
+            path_list,
+            datasource = "cellranger",
+            data_slot = "Multiplexing Capture"
+        )
+    ),
+    tar_target(
+        bpcells_cellranger,
+         convert_to_bp_cells_object(
+            dataset,
+            path_list,
+            datasource = "cellranger",
+            data_slot = "Gene Expression"
+    )
+    ),
+    tar_target(
+            bpcells_cellbender,
+            convert_to_bp_cells_object(
+                dataset,
+                path_list,
+                datasource = "cellbender"
+                )
+                )   
 )
 
-# targets_preprocessing
+
+
+#
+
+#     seurat_obj_raw_joined = create_joined_seurat_obj(
+#       bpcells_cellbender,
+#       bpcells_cellranger,
+#       bpcells_cellranger_cmo,
+#       counts_per_cell_pre_filter = 50,
+#       convert_vector = define_convert_vector()
+#     )
