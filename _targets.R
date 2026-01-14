@@ -28,62 +28,21 @@ tar_option_set(
 
 
 library(tibble)
+
+
 values <- tibble(
     # method_function = rlang::syms(c("hub_01", "hub_02")),
     dataset = c("hub_01", "hub_02")
 )
-targets <- tar_map(
+list( tar_map(
     values = values,
-    tar_target(path_list, make_proj_paths(dataset)),
-    ####
-    tar_file(
-        bpcells_cellranger,
-        convert_to_bp_cells_object(
-            dataset,
-            path_list,
-            datasource = "cellranger", # TODO probably better to split convert_to_bp_cells_object into seprate functions
-            data_slot = "Gene Expression"
-        )
-    ),
-    tar_file(
-        bpcells_cellranger_cmo,
-        convert_to_bp_cells_object(
-            dataset,
-            path_list,
-            datasource = "cellranger",
-            data_slot = "Multiplexing Capture"
-        )
-    ),
-    tar_file(
-        bpcells_cellbender,
-        convert_to_bp_cells_object(
-            dataset,
-            path_list,
-            datasource = "cellbender"
-        )
-    ),
-    tar_target(
-        convert_vector,
-        define_convert_vector(dataset)
-    ),
-    tar_target(
-        seurat_obj_raw_joined,
-        create_joined_seurat_obj(
-            dataset,
-            bpcells_cellbender,
-            bpcells_cellranger,
-            bpcells_cellranger_cmo,
-            counts_per_cell_pre_filter = 50,
-            convert_vector
-        )),
-
+    targets_config,
         ####### plots
         tar_file(
             knee_plot_cellranger,
-            make_knee(bpcells_cellranger,dataset, data_type = "rna")
+            make_knee(bpcells_cellranger,dataset, path_list, data_type = "rna")
         )
     )
+)
 
 
-
-list(targets)

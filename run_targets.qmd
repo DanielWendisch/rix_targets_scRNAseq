@@ -69,6 +69,7 @@ library(tarchetypes)
 # Loads globals like tar_option_set() packages, simulate_data(), and analyze_data():
 
 tar_make()
+targets::tar_meta(fields = error, complete_only = TRUE)|>View()
 ```
 
 
@@ -84,3 +85,8 @@ tar_make()
 # create_joined_seurat_obj()
 
 
+
+
+```{r}
+tar_visnetwork(allow=contains("hub_01"))
+```

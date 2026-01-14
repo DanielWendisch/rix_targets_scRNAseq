@@ -85,10 +85,9 @@ create_joined_seurat_obj <- function(
 
 
 
-
 #### plots
 
-make_knee <- function(path_bp_cells,dataset_name, data_type = "rna") {
+make_knee <- function(path_bp_cells,dataset_name, project_paths, data_type = "rna") {
   dat <- open_matrix_dir(dir = path_bp_cells)
   testingthis <- 2
   rna_reads_per_cell <- dat |> colSums()
@@ -97,13 +96,10 @@ make_knee <- function(path_bp_cells,dataset_name, data_type = "rna") {
     plot_read_count_knee(rna_reads_per_cell, cutoff = 5e2) +
     plot_read_count_knee(rna_reads_per_cell, cutoff = 1e2) +
     plot_annotation(title = "RNA reads per cell")
-  ggsave(knee_plot_rna,
-    filename = here(
-      "output",
-      dataset_name,
-      "qc_process",
-      "plots_and_plot_data",
+  dir.create(project_paths$output$qc_process$plots_and_plot_data, recursive = TRUE, , showWarnings = FALSE)
+  file_path <- here(
+      project_paths$output$qc_process$plots_and_plot_data,
       paste(dataset_name, data_type, "read_count_knee.png", sep = "_")
-    )
-  )
+      )
+  ggsave(plot=knee_plot_rna,filename = file_path)
 }

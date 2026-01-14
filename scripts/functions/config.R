@@ -39,6 +39,7 @@ make_proj_paths <- function(dataset_name) {
 
     proj_paths$cellbender$output <- here(proj_paths$cellbender$output_dir, paste0(dataset_name, "_cellbender_corrected_filtered_seurat.h5"))
     #proj_paths$cellranger$output <-  here(proj_paths$cellranger$output_dir, )
+    proj_paths$output$qc_process$plots_and_plot_data <- here("output",dataset_name,"qc_process","plots_and_plot_data")
     return(proj_paths)
 
 }
