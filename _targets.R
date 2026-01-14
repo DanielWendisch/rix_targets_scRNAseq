@@ -27,7 +27,16 @@ tar_option_set(
 
 # run target pipeline
 list(
-    targets_config,
+    tar_target(
+        dataset,
+        define_dataset()
+    ),
+    tar_target(
+        path_list,
+        make_proj_paths(dataset),
+        pattern = map(dataset),
+        iteration = "list"
+    ),
     # tar_target(knee_plot_cellranger,
     # make_knee(bpcells_cellranger, data_type = "rna"),
     # format = "file"
@@ -38,25 +47,29 @@ list(
             path_list,
             datasource = "cellranger",
             data_slot = "Multiplexing Capture"
-        )
-    ),
-    tar_target(
-        bpcells_cellranger,
-         convert_to_bp_cells_object(
-            dataset,
-            path_list,
-            datasource = "cellranger",
-            data_slot = "Gene Expression"
+        ),
+        pattern = map(dataset,path_list),
+        iteration="list",
+        format="file"
     )
-    ),
-    tar_target(
-            bpcells_cellbender,
-            convert_to_bp_cells_object(
-                dataset,
-                path_list,
-                datasource = "cellbender"
-                )
-                )   
+    # ),
+    # tar_target(
+    #     bpcells_cellranger,
+    #      convert_to_bp_cells_object(
+    #         dataset,
+    #         path_list,
+    #         datasource = "cellranger",
+    #         data_slot = "Gene Expression"
+    # )
+    # ),
+    # tar_target(
+    #         bpcells_cellbender,
+    #         convert_to_bp_cells_object(
+    #             dataset,
+    #             path_list,
+    #             datasource = "cellbender"
+    #             )
+    #             )   
 )
 
 

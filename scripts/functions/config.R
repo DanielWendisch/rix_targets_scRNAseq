@@ -1,6 +1,6 @@
 
 define_dataset <- function() { # expand later
-    dataset_name <- "hub_10"
+    dataset_name <- list("hub_10","hub_02")
     return(dataset_name)
 }
 
