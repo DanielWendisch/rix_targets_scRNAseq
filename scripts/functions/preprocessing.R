@@ -40,11 +40,13 @@ convert_to_bp_cells_object <- function(
 
 
 create_joined_seurat_obj <- function(
+  dataset_name,
     path_bp_cells_cellbender,
     path_bp_cells_cellranger,
     path_bp_cells_cellranger_cmo,
     counts_per_cell_pre_filter = counts_per_cell_pre_filter_global,
-    convert_vector) {
+    convert_vec) {
+      #browser()
   dat_ranger <- open_matrix_dir(dir = path_bp_cells_cellranger)
   rna_reads_per_cell <- dat_ranger |> colSums()
 
@@ -72,9 +74,11 @@ create_joined_seurat_obj <- function(
   seurat_obj[["hashtag_oligos"]] <- dat_cmo
 
   # add hashtag counts to metadata
-  dat_cmo_tbl <- dat_cmo_tbl[, names(convert_vector)]
-  colnames(dat_cmo_tbl) <- paste("hashtag_id", convert_vector, sep = "_")
+  browser()
+  dat_cmo_tbl <- dat_cmo_tbl[, names(convert_vec)]
+  colnames(dat_cmo_tbl) <- paste("hashtag_id", convert_vec, sep = "_")
   seurat_obj <- AddMetaData(object = seurat_obj, dat_cmo_tbl)
+  seurat_obj <- AddMetaData(object = seurat_obj, dataset_name, "experiment")
 
   return(seurat_obj)
 }

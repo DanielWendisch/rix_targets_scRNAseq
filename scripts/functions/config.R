@@ -4,15 +4,26 @@ define_dataset <- function() { # expand later
     return(dataset_name)
 }
 
-define_convert_vector <- function() { # expand later
-    return( 
-        c(
+define_convert_vector <- function(dataset_name) { # expand later
+if(dataset_name=="hub_10"){vec=c(
   "CMO301" = "hLOA_BIHi001-B",
   "CMO302" = "hLOA_BIHi005-A",
   "CMO303" = "hLOA_BIHi250-A",
   "CMO304" = "hLOA_UCSFi001-A")
-  )
+  }
+
+  if(dataset_name=="hub_02"){vec=c(
+  "CMO306" = "EC_BIHi005-A",
+  "CMO305" = "EC_BIHi001-B",
+  "CMO307" = "EC_BIHi250-A",
+  "CMO308" = "EC_UCSFi001-A",
+  "CMO309"= "EC_BIHi001-A")
+  }
+
+  return(vec)
 }
+
+
 
 
 # input directory paths

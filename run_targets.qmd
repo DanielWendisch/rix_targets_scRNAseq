@@ -61,23 +61,26 @@ tibble(
 )
 ```
 
-,
-    bpcells_cellranger = convert_to_bp_cells_object(
-      dataset,
-      path_list,
-      datasource = "cellranger",
-      data_slot = "Gene Expression",
-      
-    ),
-    bpcells_cellbender = convert_to_bp_cells_object(
-      dataset,
-      path_list,
-      datasource = "cellbender"
-    ),
-    seurat_obj_raw_joined = create_joined_seurat_obj(
-      bpcells_cellbender,
-      bpcells_cellranger,
-      bpcells_cellranger_cmo,
-      counts_per_cell_pre_filter = 50,
-      convert_vector = define_convert_vector()
-    )
+## Debugging
+```{r}
+library(targets)
+library(tarchetypes)
+
+# Loads globals like tar_option_set() packages, simulate_data(), and analyze_data():
+
+tar_make()
+```
+
+
+# tar_load(seurat_obj_raw_joined)
+# seurat_obj_raw_joined
+
+# tar_load(dataset)
+# tar_load(bpcells_cellbender)
+# tar_load(bpcells_cellranger)
+# tar_load(bpcells_cellranger_cmo)
+# tar_load(convert_vector)
+
+# create_joined_seurat_obj()
+
+

@@ -23,6 +23,7 @@ tar_option_set(
         "ggplot2"
     ),
     format = "qs",
+    error="null"
 )
 
 # run target pipeline
@@ -48,38 +49,67 @@ list(
             datasource = "cellranger",
             data_slot = "Multiplexing Capture"
         ),
-        pattern = map(dataset,path_list),
-        iteration="list",
-        format="file"
+        pattern = map(dataset, path_list),
+        iteration = "list",
+        format = "file"
+    ),
+    tar_target(
+        bpcells_cellranger,
+        convert_to_bp_cells_object(
+            dataset,
+            path_list,
+            datasource = "cellranger",
+            data_slot = "Gene Expression"
+        ),
+        pattern = map(dataset, path_list),
+        iteration = "list",
+        format = "file"
+    ),
+    tar_target(
+        bpcells_cellbender,
+        convert_to_bp_cells_object(
+            dataset,
+            path_list,
+            datasource = "cellbender"
+        ),
+        pattern = map(dataset, path_list),
+        iteration = "list",
+        format = "file"
+    ),
+    tar_target(
+        convert_vector,
+        define_convert_vector(dataset),
+        pattern = map(dataset)
+    ),
+    tar_target(
+        seurat_obj_raw_joined,
+        create_joined_seurat_obj(
+            dataset,
+            bpcells_cellbender,
+            bpcells_cellranger,
+            bpcells_cellranger_cmo,
+            counts_per_cell_pre_filter = 50,
+            convert_vector 
+        ),
+        pattern = map(
+            dataset,
+            bpcells_cellbender,
+            bpcells_cellranger,
+            bpcells_cellranger_cmo,
+            convert_vector
+        ),
+        iteration = "list"
     )
-    # ),
-    # tar_target(
-    #     bpcells_cellranger,
-    #      convert_to_bp_cells_object(
-    #         dataset,
-    #         path_list,
-    #         datasource = "cellranger",
-    #         data_slot = "Gene Expression"
-    # )
-    # ),
-    # tar_target(
-    #         bpcells_cellbender,
-    #         convert_to_bp_cells_object(
-    #             dataset,
-    #             path_list,
-    #             datasource = "cellbender"
-    #             )
-    #             )   
 )
 
 
 
 #
 
-#     seurat_obj_raw_joined = create_joined_seurat_obj(
-#       bpcells_cellbender,
-#       bpcells_cellranger,
-#       bpcells_cellranger_cmo,
-#       counts_per_cell_pre_filter = 50,
-#       convert_vector = define_convert_vector()
-#     )
+# seurat_obj_raw_joined = create_joined_seurat_obj(
+#   bpcells_cellbender,
+#   bpcells_cellranger,
+#   bpcells_cellranger_cmo,
+#   counts_per_cell_pre_filter = 50,
+#   convert_vector = define_convert_vector()
+# )
