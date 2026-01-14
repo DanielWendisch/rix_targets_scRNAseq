@@ -74,7 +74,6 @@ create_joined_seurat_obj <- function(
   seurat_obj[["hashtag_oligos"]] <- dat_cmo
 
   # add hashtag counts to metadata
-  browser()
   dat_cmo_tbl <- dat_cmo_tbl[, names(convert_vec)]
   colnames(dat_cmo_tbl) <- paste("hashtag_id", convert_vec, sep = "_")
   seurat_obj <- AddMetaData(object = seurat_obj, dat_cmo_tbl)
@@ -89,7 +88,7 @@ create_joined_seurat_obj <- function(
 
 #### plots
 
-make_knee <- function(path_bp_cells, data_type = "rna") {
+make_knee <- function(path_bp_cells,dataset_name, data_type = "rna") {
   dat <- open_matrix_dir(dir = path_bp_cells)
   testingthis <- 2
   rna_reads_per_cell <- dat |> colSums()

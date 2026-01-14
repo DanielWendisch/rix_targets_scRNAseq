@@ -23,63 +23,48 @@ tar_option_set(
         "ggplot2"
     ),
     format = "qs",
-    error="null"
+    error = "null"
 )
 
-# run target pipeline
-list(
-    tar_target(
-        dataset,
-        define_dataset()
+
+library(tibble)
+values <- tibble(
+    # method_function = rlang::syms(c("hub_01", "hub_02")),
+    dataset = c("hub_01", "hub_02")
+)
+targets <- tar_map(
+    values = values,
+    tar_target(path_list, make_proj_paths(dataset)),
+    ####
+    tar_file(
+        bpcells_cellranger,
+        convert_to_bp_cells_object(
+            dataset,
+            path_list,
+            datasource = "cellranger", # TODO probably better to split convert_to_bp_cells_object into seprate functions
+            data_slot = "Gene Expression"
+        )
     ),
-    tar_target(
-        path_list,
-        make_proj_paths(dataset),
-        pattern = map(dataset),
-        iteration = "list"
-    ),
-    # tar_target(knee_plot_cellranger,
-    # make_knee(bpcells_cellranger, data_type = "rna"),
-    # format = "file"
-    tar_target(
+    tar_file(
         bpcells_cellranger_cmo,
         convert_to_bp_cells_object(
             dataset,
             path_list,
             datasource = "cellranger",
             data_slot = "Multiplexing Capture"
-        ),
-        pattern = map(dataset, path_list),
-        iteration = "list",
-        format = "file"
+        )
     ),
-    tar_target(
-        bpcells_cellranger,
-        convert_to_bp_cells_object(
-            dataset,
-            path_list,
-            datasource = "cellranger",
-            data_slot = "Gene Expression"
-        ),
-        pattern = map(dataset, path_list),
-        iteration = "list",
-        format = "file"
-    ),
-    tar_target(
+    tar_file(
         bpcells_cellbender,
         convert_to_bp_cells_object(
             dataset,
             path_list,
             datasource = "cellbender"
-        ),
-        pattern = map(dataset, path_list),
-        iteration = "list",
-        format = "file"
+        )
     ),
     tar_target(
         convert_vector,
-        define_convert_vector(dataset),
-        pattern = map(dataset)
+        define_convert_vector(dataset)
     ),
     tar_target(
         seurat_obj_raw_joined,
@@ -89,27 +74,16 @@ list(
             bpcells_cellranger,
             bpcells_cellranger_cmo,
             counts_per_cell_pre_filter = 50,
-            convert_vector 
-        ),
-        pattern = map(
-            dataset,
-            bpcells_cellbender,
-            bpcells_cellranger,
-            bpcells_cellranger_cmo,
             convert_vector
-        ),
-        iteration = "list"
+        )),
+
+        ####### plots
+        tar_file(
+            knee_plot_cellranger,
+            make_knee(bpcells_cellranger,dataset, data_type = "rna")
+        )
     )
-)
 
 
 
-#
-
-# seurat_obj_raw_joined = create_joined_seurat_obj(
-#   bpcells_cellbender,
-#   bpcells_cellranger,
-#   bpcells_cellranger_cmo,
-#   counts_per_cell_pre_filter = 50,
-#   convert_vector = define_convert_vector()
-# )
+list(targets)
