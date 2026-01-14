@@ -1,0 +1,83 @@
+---
+title: "run targets"
+format:
+  html:
+    toc: true
+---
+
+```{r}
+library(targets)
+library(tarchetypes)
+```
+
+```{r}
+tar_manifest()
+```
+
+```{r}
+tar_make()
+```
+
+
+```{r}
+tar_visnetwork()
+```
+
+```{r}
+tar_load(seurat_obj_raw_joined)
+seurat_obj_raw_joined
+```
+
+
+
+```{r}
+tar_option_set(
+  packages = c(
+    "here",
+    "Seurat",
+    "BPCells"
+  ),
+  format = "qs",
+)
+
+tar_load_globals()
+tar_meta(fields = error, complete_only = TRUE)
+
+library(qs2)
+tar_load(bpcells_cellranger_cmo)
+```
+
+
+```{r}
+expand.grid(var1 = c("a", "b"), var2 = c("c", "d"), rep = c(1, 2, 3))
+
+```
+
+```{r}
+library(tibble)
+tibble(
+  method_function = rlang::syms(c("method1", "method2")),
+  data_source = c("NIH", "NIAID")
+)
+```
+
+,
+    bpcells_cellranger = convert_to_bp_cells_object(
+      dataset,
+      path_list,
+      datasource = "cellranger",
+      data_slot = "Gene Expression",
+      
+    ),
+    bpcells_cellbender = convert_to_bp_cells_object(
+      dataset,
+      path_list,
+      datasource = "cellbender"
+    ),
+    seurat_obj_raw_joined = create_joined_seurat_obj(
+      bpcells_cellbender,
+      bpcells_cellranger,
+      bpcells_cellranger_cmo,
+      counts_per_cell_pre_filter = 50,
+      convert_vector = define_convert_vector()
+    )
