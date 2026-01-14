@@ -44,7 +44,7 @@ create_joined_seurat_obj <- function(
     path_bp_cells_cellbender,
     path_bp_cells_cellranger,
     path_bp_cells_cellranger_cmo,
-    counts_per_cell_pre_filter = counts_per_cell_pre_filter_global,
+    counts_per_cell_pre_filter = 50,
     convert_vec) {
       #browser()
   dat_ranger <- open_matrix_dir(dir = path_bp_cells_cellranger)
