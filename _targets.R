@@ -37,11 +37,12 @@ values <- tibble(
 list( tar_map(
     values = values,
     targets_config,
-        ####### plots
-        tar_file(
-            knee_plot_cellranger,
-            make_knee(bpcells_cellranger,dataset, path_list, data_type = "rna")
-        )
+    tar_file(
+        knee_plot_cellranger,
+        make_knee(bpcells_cellranger,dataset, path_list, data_type = "rna")
+         ),
+    targets_preprocessing
+        
     )
 )
 

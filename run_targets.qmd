@@ -70,7 +70,26 @@ library(tarchetypes)
 
 tar_make()
 targets::tar_meta(fields = error, complete_only = TRUE)|>View()
+
 ```
+
+
+```{r}
+tar_make( something,
+create_joined_seurat_obj(
+            dataset,
+            bpcells_cellbender_hub_01,
+            bpcells_cellranger_hub_01,
+            bpcells_cellranger_cmo_hub_01,
+            convert_vector_hub_01
+        ), 
+        
+)
+```
+
+
+
+
 
 
 # tar_load(seurat_obj_raw_joined)
