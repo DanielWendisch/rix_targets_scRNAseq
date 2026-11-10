@@ -10,3 +10,5 @@ _target
 *.qs
 *.rds
 _targets/
+result
+result-*

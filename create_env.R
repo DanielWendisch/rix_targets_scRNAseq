@@ -1,7 +1,5 @@
 library(rix)
 
-#my_token <- gitcreds::gitcreds_get()$password
-#Sys.setenv(GITHUB_PAT = my_token)
 
 rix(
   date = "2025-07-07",
